@@ -14,21 +14,30 @@ const worldWidth = 128, worldDepth = 128;
 init();
 
 function init() {
-
-
-    const fogAmount = 0.0007; // 0.0007
     const waterImg = 'https://media.istockphoto.com/id/1158274915/vector/grass-seamless-realistic-texture-green-lawn-field-or-meadow-vector-background-summer-or.jpg?s=612x612&w=0&k=20&c=7AAqciofj43K5kmQxxOBCO1Rj0YUuFZdcTuO9XwZOsc='
 
 
-
-    camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 20000);
+    const cameraFov = 60; // 60
+    const cameraNear = 1; // 1
+    const cameraFar = 20000; // 20000
+    camera = new THREE.PerspectiveCamera(cameraFov, window.innerWidth / window.innerHeight, cameraNear, cameraFar);
     camera.position.y = 200;
 
     clock = new THREE.Clock();
 
+    // ***
+    //          SCENE
+    // ***
     scene = new THREE.Scene();
-    scene.background = new THREE.Color(fogColor);
+    scene.background = new THREE.Color(
+        0xaaafff
+    );
 
+
+    // ***
+    //          FOG
+    // ***
+    const fogAmount = 0.0007; // 0.0007
     const fogColor = new THREE.Color(0xaaccff);
     scene.fog = new THREE.FogExp2(fogColor, fogAmount);
 
@@ -38,8 +47,8 @@ function init() {
 
     const geometryWidth = 20000;
     const geometryHeight = 20000;
-    const geometryWidthSections = worldWidth + 1; // this is the number of vertices in the x direction
-    const geometryHeightSections = worldDepth - 50; // this is the number of vertices in the z direction
+    const geometryWidthSections = worldWidth + 1; // number of waves in direction
+    const geometryHeightSections = worldDepth + 10; // number of waves in direction
     geometry = new THREE.PlaneGeometry(geometryWidth, geometryHeight, geometryWidthSections, geometryHeightSections);
     geometry.rotateX(- Math.PI / 2); // rotate the plane so it is flat
 
@@ -59,10 +68,13 @@ function init() {
 
     // ***
     //          MATERIAL
+    // light blue
     // ***
-    const materialColor = 0x0044ff;
+    const materialColor = 0x7788ff;
 
     material = new THREE.MeshBasicMaterial({ color: materialColor, map: texture });
+    // make hte material light blue glowing
+    // material = new THREE.MeshBasicMaterial({ color: materialColor, map: texture, emissive: 0x0000ff, emissiveIntensity: 0.1 });
 
     mesh = new THREE.Mesh(geometry, material);
     scene.add(mesh);
